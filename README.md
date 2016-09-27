@@ -36,7 +36,7 @@ Now add the module to the modules array in the `config/config.js` file:
                                                 "5": "japanese",
                                                 "6": "quick",
                                                 "0": "vegetarian"
-                                },
+                                }
                         }
                 },
 ````
