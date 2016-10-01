@@ -64,6 +64,8 @@ Module.register("mmm-food2fork-recipes",{
                 var pRequest;
                 if (pageNum > 0) {
                     pRequest = "&page="+pageNum;
+                } else {
+                    pRequest = "&page=1";
                 }
                 var url = this.config.apiSearch + "?key=" + this.config.APIkey + "&q=" + this.config.daysTable[n]+pRequest;
                 self.sendSocketNotification("GET_RECIPE", {config: this.config, url: url});
