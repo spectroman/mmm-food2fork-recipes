@@ -11,10 +11,11 @@ Module.register("mmm-food2fork-recipes",{
 
         // Default module config.
         defaults: {
-                APIkey: "", // API key from food 2 fork
+                APIkey: "GETYOUROWNKEY", // API key from food 2 fork
                 updateInterval: 3600 * 1000, // every hour
                 animationSpeed: 1000,
                 listSize: 4,
+                maxTitleSize: 40,
                 fade: true,
                 fadePoint: 0.25, // Start on 1/4th of the list.
                 initialLoadDelay: 2500, // 2.5 seconds delay.
@@ -54,7 +55,6 @@ Module.register("mmm-food2fork-recipes",{
                 this.updateTimer = null;
 
         },
-
         updateRecipes: function() {
                 var self = this;
                 var d = new Date();
@@ -65,18 +65,18 @@ Module.register("mmm-food2fork-recipes",{
                 if (pageNum > 0) {
                     pRequest = "&page="+pageNum;
                 } else {
-                    pRequest = "&page=1";
+                    pRequest="&page=1";
                 }
                 var url = this.config.apiSearch + "?key=" + this.config.APIkey + "&q=" + this.config.daysTable[n]+pRequest;
                 self.sendSocketNotification("GET_RECIPE", {config: this.config, url: url});
         },
-
+        
         socketNotificationReceived: function(notification, payload) {
                 if(notification === "RECIPE"){
                                 this.processRecipe(payload);
                                 this.scheduleUpdate();
                 }
-
+                
         },
 
         processRecipe: function(data) {
@@ -99,9 +99,10 @@ Module.register("mmm-food2fork-recipes",{
                       }
                     }
 //                  console.log("From: "+data.recipes[rec].publisher+", Name: "+data.recipes[rec].title);
+                    var titleLimit = data.recipes[rec].title.substring(0,this.config.maxTitleSize);
                     this.foodlist.push({
                         publisher: data.recipes[rec].publisher,
-                        namedish: data.recipes[rec].title,
+                        namedish: titleLimit,
                         image: data.recipes[rec].image_url
                     });
                     idxCheck[count]=rec;
